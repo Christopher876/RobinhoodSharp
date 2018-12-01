@@ -32,12 +32,12 @@ namespace Robinhood
 			//login.AccessToken = authentication.AuthenticateUser(login,true);
 			authentication.ReadAccessToken(login);
 			authentication.CheckRefreshToken(login);
-
+			
 			//account.GatherBasicInfo(login.AccessToken);
 			//account.GatherAccountID(login.AccessToken);
 			//Console.ReadLine();
 
-			/*
+			
 			var quoteData = quotes.GatherData("GOOGL");
 
 			string[] data = new string[]
@@ -78,7 +78,7 @@ namespace Robinhood
 			InstrumentData instrument = instruments.InstrumentsBySymbol("MSFT");
 			Console.WriteLine(instrument.simpleName);
 			Console.WriteLine(instruments.InstrumentsByID("777c0d30-3f78-4449-8d85-49702ae96a34").name);
-			*/
+	
 			Console.WriteLine("----------------------------------ALL------------------------------");
 			InstrumentData[] allInstruments = instruments.AllInstruments();
 			Console.WriteLine(allInstruments[18].name);
@@ -108,6 +108,14 @@ namespace Robinhood
 			Console.WriteLine(account.GatherListofAccounts(login.AccessToken) + Environment.NewLine);
 			Console.WriteLine(account.GatherEmploymentData(login.AccessToken).employerName + Environment.NewLine);
 			Console.WriteLine(account.GatherAccountHolderAffliationInfo(login.AccessToken).agreedToRhs + Environment.NewLine);
+
+			Console.WriteLine("----------------------------------------------Account Basic Info---------------------------------------");
+			AccountBasicInfo basicInfo = account.GatherBasicInfo(login.AccessToken);
+			Console.WriteLine(basicInfo.citizenship);
+			Console.WriteLine(basicInfo.countryOfResident);
+			Console.WriteLine(basicInfo.phoneNumber);
+			Console.WriteLine(basicInfo.state);
+
 			Console.ReadLine();
 		}
 	}

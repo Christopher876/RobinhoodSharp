@@ -319,7 +319,7 @@ namespace Robinhood
 
 			return splitData;
 		}
-		public static Employment GetEmployment(string data)
+		public static Employment ParseEmployment(string data)
 		{
 			JToken json = JToken.Parse(data);
 			Employment employment = new Employment();
@@ -339,7 +339,7 @@ namespace Robinhood
 
 			return employment;
 		}
-		public static AccountAffiliationInfo GetAccountAffiliationInfo(string data)
+		public static AccountAffiliationInfo ParseAccountAffiliationInfo(string data)
 		{
 			AccountAffiliationInfo accountAffiliationInfo = new AccountAffiliationInfo();
 			JToken json = JToken.Parse(data);
@@ -358,6 +358,42 @@ namespace Robinhood
 			accountAffiliationInfo.securityAffiliatedFirmName = (string)json["security_affiliated_firm_name"];
 			accountAffiliationInfo.securityAffiliatedPersonName = (string)json["security_affiliated_person_name"];
 			return accountAffiliationInfo;
+		}
+		public static AccountID ParseAccountID(string data)
+		{
+			JToken json = JToken.Parse(data);
+			AccountID accountID = new AccountID();
+
+			accountID.id = (string)json["id"];
+			accountID.url = (string)json["url"];
+			accountID.username = (string)json["username"];
+			return accountID;
+		}
+		public static AccountBasicInfo ParseAccountBasicInfo(string data)
+		{
+			JToken json = JToken.Parse(data);
+			AccountBasicInfo basicInfo = new AccountBasicInfo();
+			basicInfo.address = (string)json["address"];
+			basicInfo.citizenship = (string)json["citizenship"];
+			basicInfo.city = (string)json["city"];
+			basicInfo.countryOfResident = (string)json["country_of_residence"];
+			basicInfo.dateOfBirth = (string)json["date_of_birth"];
+			basicInfo.maritialStatus = (string)json["martial_status"];
+			basicInfo.numberDependents = (int)json["number_dependents"];
+			basicInfo.phoneNumber = (string)json["phone_number"];
+			basicInfo.state = (string)json["state"];
+			basicInfo.taxIDSSN = (int)json["tax_id_ssn"];
+			basicInfo.updatedAt = (string)json["updated_at"];
+			basicInfo.zipcode = (int)json["zipcode"];
+			return basicInfo;
+		}
+		public static AccountListKeys ParseListAccounts(string data)
+		{
+			AccountListKeys accountData = new AccountListKeys();
+			JToken json = JToken.Parse(data);
+
+			return accountData;
+			
 		}
 	}
 }

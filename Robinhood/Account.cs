@@ -10,6 +10,13 @@ namespace Robinhood
 
 	}
 
+	class AccountID
+	{
+		public string username;
+		public string url;
+		public string id;
+	}
+
 	class AccountListKeys
 	{
 		public bool deactivated, withdrawalHalted, sweepEnabled, depositHalted, onlyPositionClosingTrades, nummusEnabled;
@@ -82,32 +89,49 @@ namespace Robinhood
 		public string occupation;
 	}
 
+	class AccountBasicInfo
+	{
+		public string phoneNumber;
+		public string city;
+		public int numberDependents;
+		public string citizenship;
+		public string updatedAt;
+		public string maritialStatus;
+		public int zipcode;
+		public string countryOfResident;
+		public string state;
+		public string dateOfBirth;
+		public bool signUpAsRhs;
+		public string address;
+		public int taxIDSSN;
+	}
+
 	class Account
 	{
 
-		public string GatherListofAccounts(string accessToken)
+		public AccountListKeys GatherListofAccounts(string accessToken)
 		{
-			return RHttpClient.RHttpClientGetWithAuthenticationHeader("/accounts/", accessToken);
+			return JsonParse.ParseListAccounts(RHttpClient.RHttpClientGetWithAuthenticationHeader("/accounts/", accessToken));
 		}
 
-		public string GatherBasicInfo(string accessToken)
+		public AccountBasicInfo GatherBasicInfo(string accessToken)
 		{
-			return RHttpClient.RHttpClientGetWithAuthenticationHeader("/user/basic_info/",accessToken);
+			return JsonParse.ParseAccountBasicInfo(RHttpClient.RHttpClientGetWithAuthenticationHeader("/user/basic_info/",accessToken));
 		}
 
-		public string GatherAccountID(string accessToken)
+		public AccountID GatherAccountID(string accessToken)
 		{
-			return RHttpClient.RHttpClientGetWithAuthenticationHeader("/user/id/",accessToken);
+			return JsonParse.ParseAccountID(RHttpClient.RHttpClientGetWithAuthenticationHeader("/user/id/",accessToken));
 		}
 
 		public AccountAffiliationInfo GatherAccountHolderAffliationInfo(string accessToken)
 		{
-			return JsonParse.GetAccountAffiliationInfo(RHttpClient.RHttpClientGetWithAuthenticationHeader("/user/additional_info/", accessToken));
+			return JsonParse.ParseAccountAffiliationInfo(RHttpClient.RHttpClientGetWithAuthenticationHeader("/user/additional_info/", accessToken));
 		}
 
 		public Employment GatherEmploymentData(string accessToken)
 		{
-			return JsonParse.GetEmployment(RHttpClient.RHttpClientGetWithAuthenticationHeader("/user/employment/", accessToken));
+			return JsonParse.ParseEmployment(RHttpClient.RHttpClientGetWithAuthenticationHeader("/user/employment/", accessToken));
 		}
 	}
 }
