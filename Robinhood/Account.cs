@@ -5,6 +5,7 @@ using System.Text;
 
 namespace Robinhood
 {
+	//TODO NEED TO IMPLEMENT INSTANT_ELIGIBILITY
 	class AccountData
 	{
 
@@ -19,9 +20,10 @@ namespace Robinhood
 
 	class AccountListKeys
 	{
-		public bool deactivated, withdrawalHalted, sweepEnabled, depositHalted, onlyPositionClosingTrades, nummusEnabled;
-		public string updatedAt, marginBalances, portfolio, cashBalances, type, user, url, positions, createdAt, accountNumber;
-		public float cashAvailableForWithdrawal, sma, buyingPower, maxAchEarlyAccessAmount, cashHealdForOrders, cash, smaHealdForOrders, unclearedDeposits, unsettledFunds;
+		public bool deactivated, withdrawalHalted, sweepEnabled, depositHalted, onlyPositionClosingTrades, isPinnacleAccount;
+		public string updatedAt, portfolio, type, user, url, positions, createdAt, accountNumber, canDowngradeToCash, optionLevel;
+		public string cashBalances = null;
+		public float sma, buyingPower, maxAchEarlyAccessAmount, cashHealdForOrders, cash, smaHealdForOrders, unclearedDeposits, unsettledFunds, unsettledDebit;
 	}
 
 	class MarginBalances
@@ -32,11 +34,11 @@ namespace Robinhood
 		public float cashHeldForOptionsCollateral;
 		public float unclearedNummusDeposits;
 		public float overnightRatio;
-		public float dayTradeBuyingPower;
+		public float? dayTradeBuyingPower = null;
 		public float cashAvailableForWithdrawal;
 		public float sma;
 		public float cashHeldForNummusRestrictions;
-		public bool markedPatternDayTraderDate;
+		public bool? markedPatternDayTraderDate;
 		public float unallocatedMarginCash;
 		public float startOfDaydtbp;
 		public float overnightBuyingPowerHeldForOrders;
@@ -106,6 +108,12 @@ namespace Robinhood
 		public int taxIDSSN;
 	}
 
+	class InvestmentProfileData
+	{
+		public string annualIncome, investmentExperience, investmentObjective, liquidNetWorth, liquidityNeeds, riskTolerance, sourceOfFunds, taxBracket, timeHorizon, totalNetWorth, updatedAt, user;
+		public bool suitabilityVerified;
+	}
+
 	class Account
 	{
 
@@ -132,6 +140,16 @@ namespace Robinhood
 		public Employment GatherEmploymentData(string accessToken)
 		{
 			return JsonParse.ParseEmployment(RHttpClient.RHttpClientGetWithAuthenticationHeader("/user/employment/", accessToken));
+		}
+
+		public MarginBalances GatherMarginBalances(string accessToken)
+		{
+			return JsonParse.ParseMarginBalances(RHttpClient.RHttpClientGetWithAuthenticationHeader("/accounts/", accessToken));
+		}
+
+		public string GatherInvestmentProfile(string accessToken)
+		{
+			return RHttpClient.RHttpClientGetWithAuthenticationHeader("/user/investment_profile/", accessToken);
 		}
 	}
 }

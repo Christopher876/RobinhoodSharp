@@ -32,7 +32,7 @@ namespace Robinhood
 			//login.AccessToken = authentication.AuthenticateUser(login,true);
 			authentication.ReadAccessToken(login);
 			authentication.CheckRefreshToken(login);
-			
+			/*
 			//account.GatherBasicInfo(login.AccessToken);
 			//account.GatherAccountID(login.AccessToken);
 			//Console.ReadLine();
@@ -115,6 +115,12 @@ namespace Robinhood
 			Console.WriteLine(basicInfo.countryOfResident);
 			Console.WriteLine(basicInfo.phoneNumber);
 			Console.WriteLine(basicInfo.state);
+			*/
+
+			Console.WriteLine(account.GatherListofAccounts(login.AccessToken).accountNumber);
+			Console.WriteLine(account.GatherMarginBalances(login.AccessToken).updatedAt);
+			Console.WriteLine("Start of day overnight buying power = " + account.GatherMarginBalances(login.AccessToken).startOfDayOvernightBuyingPower);
+			Console.WriteLine(Environment.NewLine + account.GatherInvestmentProfile(login.AccessToken));
 
 			Console.ReadLine();
 		}

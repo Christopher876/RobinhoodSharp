@@ -392,8 +392,70 @@ namespace Robinhood
 			AccountListKeys accountData = new AccountListKeys();
 			JToken json = JToken.Parse(data);
 
-			return accountData;
-			
+			accountData.deactivated = (bool)json["results"][0]["deactivated"];
+			accountData.updatedAt = (string)json["results"][0]["updated_at"];
+			accountData.portfolio = (string)json["results"][0]["portfolio"];
+
+			if (json["results"][0]["cash_balances"].Type != JTokenType.Null) accountData.cashBalances = (string)json["results"][0]["cash_balances"];
+			accountData.canDowngradeToCash = (string)json["results"][0]["can_downgrade_to_cash"];
+			accountData.withdrawalHalted = (bool)json["results"][0]["withdrawal_halted"];
+			accountData.type = (string)json["results"][0]["type"];
+			accountData.sma = (float)json["results"][0]["sma"];
+			accountData.sweepEnabled = (bool)json["results"][0]["sweep_enabled"];
+			accountData.depositHalted = (bool)json["results"][0]["deposit_halted"];
+			accountData.buyingPower = (float)json["results"][0]["buying_power"];
+			accountData.user = (string)json["results"][0]["user"];
+			accountData.maxAchEarlyAccessAmount = (float)json["results"][0]["max_ach_early_access_amount"];
+			accountData.optionLevel = (string)json["results"][0]["option_level"];
+			accountData.cashHealdForOrders = (float)json["results"][0]["cash_held_for_orders"];
+			accountData.onlyPositionClosingTrades = (bool)json["results"][0]["only_position_closing_trades"];
+			accountData.url = (string)json["results"][0]["url"];
+			accountData.positions = (string)json["results"][0]["positions"];
+			accountData.createdAt = (string)json["results"][0]["created_at"];
+			accountData.cash = (float)json["results"][0]["cash"];
+			accountData.smaHealdForOrders = (float)json["results"][0]["sma_held_for_orders"];
+			accountData.unsettledDebit = (float)json["results"][0]["unsettled_debit"];
+			accountData.accountNumber = (string)json["results"][0]["account_number"];
+			accountData.isPinnacleAccount = (bool)json["results"][0]["is_pinnacle_account"];
+			accountData.unclearedDeposits = (float)json["results"][0]["uncleared_deposits"];
+			accountData.unsettledFunds = (float)json["results"][0]["unsettled_funds"];
+
+			return accountData;			
+		}
+		public static MarginBalances ParseMarginBalances(string data)
+		{
+			MarginBalances marginBalances = new MarginBalances();
+			JToken json = JToken.Parse(data);
+
+			marginBalances.updatedAt = (string)json["results"][0]["margin_balances"]["updated_at"];
+			marginBalances.goldEquityRequirement = (float)json["results"][0]["margin_balances"]["gold_equity_requirement"];
+			marginBalances.outstandingInterest = (float)json["results"][0]["margin_balances"]["outstanding_interest"];
+			marginBalances.cashHeldForOptionsCollateral = (float)json["results"][0]["margin_balances"]["cash_held_for_options_collateral"];
+			marginBalances.unclearedNummusDeposits = (float)json["results"][0]["margin_balances"]["uncleared_nummus_deposits"];
+			marginBalances.overnightRatio = (float)json["results"][0]["margin_balances"]["overnight_ratio"];
+			marginBalances.dayTradeBuyingPower = (float)json["results"][0]["margin_balances"]["day_trade_buying_power"];
+			marginBalances.cashAvailableForWithdrawal = (float)json["results"][0]["margin_balances"]["cash_available_for_withdrawal"];
+			marginBalances.sma = (float)json["results"][0]["margin_balances"]["sma"];
+			marginBalances.cashHeldForNummusRestrictions = (float)json["results"][0]["margin_balances"]["cash_held_for_nummus_restrictions"];
+			if (json["results"][0]["margin_balances"]["marked_pattern_day_trader_date"].Type != JTokenType.Null) marginBalances.markedPatternDayTraderDate = (bool)json["results"][0]["margin_balances"]["marked_pattern_day_trader_date"];
+			marginBalances.unallocatedMarginCash = (float)json["results"][0]["margin_balances"]["unallocated_margin_cash"];
+			marginBalances.startOfDaydtbp = (float)json["results"][0]["margin_balances"]["start_of_day_dtbp"];
+			marginBalances.overnightBuyingPowerHeldForOrders = (float)json["results"][0]["margin_balances"]["overnight_buying_power_held_for_orders"];
+			marginBalances.dayTradeRatio = (float)json["results"][0]["margin_balances"]["day_trade_ratio"];
+			marginBalances.cashHeldForOrders = (float)json["results"][0]["margin_balances"]["cash_held_for_orders"];
+			marginBalances.unsettledDebit = (float)json["results"][0]["margin_balances"]["unsettled_debit"];
+			marginBalances.createdAt = (string)json["results"][0]["margin_balances"]["created_at"];
+			marginBalances.cashHeldForDividends = (float)json["results"][0]["margin_balances"]["cash_held_for_dividends"];
+			marginBalances.cash = (float)json["results"][0]["margin_balances"]["cash"];
+			marginBalances.startOfDayOvernightBuyingPower = (float)json["results"][0]["margin_balances"]["start_of_day_overnight_buying_power"];
+			marginBalances.marginLimit = (float)json["results"][0]["margin_balances"]["margin_limit"];
+			marginBalances.overnightBuyingPower = (float)json["results"][0]["margin_balances"]["overnight_buying_power"];
+			marginBalances.unclearedDeposits = (float)json["results"][0]["margin_balances"]["uncleared_deposits"];
+			marginBalances.unsettledFunds = (float)json["results"][0]["margin_balances"]["unsettled_funds"];
+			marginBalances.dayTradeBuyingPowerHeldForOrders = (float)json["results"][0]["margin_balances"]["day_trade_buying_power_held_for_orders"];
+
+
+			return marginBalances;
 		}
 	}
 }
