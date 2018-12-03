@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Robinhood
 {
 	class Program
 	{
+		public JToken TesterAuthenication(string accessToken,string testPoint)
+		{
+			return JToken.Parse(RHttpClient.RHttpClientGetWithAuthenticationHeader(testPoint, accessToken));
+		}
+
 		static void Main(string[] args)
 		{
 			Login login = new Login();
@@ -117,11 +124,27 @@ namespace Robinhood
 			Console.WriteLine(basicInfo.state);
 			*/
 
-			Console.WriteLine(account.GatherListofAccounts(login.AccessToken).accountNumber);
+			Console.WriteLine("Account Number: " + account.GatherListofAccounts(login.AccessToken).accountNumber);
 			Console.WriteLine(account.GatherMarginBalances(login.AccessToken).updatedAt);
 			Console.WriteLine("Start of day overnight buying power = " + account.GatherMarginBalances(login.AccessToken).startOfDayOvernightBuyingPower);
-			Console.WriteLine(Environment.NewLine + account.GatherInvestmentProfile(login.AccessToken));
 
+			Console.WriteLine("------------------------------------------------------------------------------Investment----------------------------------------------");
+			InvestmentProfileData investmentProfileData = account.GatherInvestmentProfile(login.AccessToken);
+			Console.WriteLine("Liquid net Worth: " + investmentProfileData.liquidNetWorth);
+			Console.WriteLine("Risk Tolerance: " + investmentProfileData.riskTolerance);
+			Console.WriteLine("Investment Objective" + investmentProfileData.investmentObjective);
+			Console.WriteLine("\n\n" + account.GatherAccountPositions(login.AccessToken));
+
+			Console.WriteLine("------------------------------------------------------------------------------Test----------------------------------------------");
+			Program program = new Program();
+			Console.WriteLine(program.TesterAuthenication(login.AccessToken, "/applications/") + Environment.NewLine); //Applications
+			Console.WriteLine(program.TesterAuthenication(login.AccessToken, ("/accounts/" + account.GatherListofAccounts(login.AccessToken).accountNumber) + "/recent_day_trades/")); //Recent Day Trades
+			Console.WriteLine(program.TesterAuthenication(login.AccessToken, "/settings/margin/" + account.GatherListofAccounts(login.AccessToken).accountNumber + "/")); //Margin Settings
+			Console.WriteLine(JToken.Parse(RHttpClient.RHttpClientGet("/markets/"))); //market Info
+																					  //Get specific market info: /markets/{mic}/
+																					  //Get Market hours /markets/{mic}/hours/{date} WILL RETURN NULL FOR ALL VALUES IF NOT OPEN THAT DAY
+			Console.WriteLine(JToken.Parse(RHttpClient.RHttpClientGet("/markets/BATS/hours/2018-12-12")));
+			Console.WriteLine(JToken.Parse(RHttpClient.RHttpClientGet("/markets/BATS/hours/2018-12-25")));
 			Console.ReadLine();
 		}
 	}

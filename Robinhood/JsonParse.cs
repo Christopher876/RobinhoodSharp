@@ -457,5 +457,30 @@ namespace Robinhood
 
 			return marginBalances;
 		}
+		public static InvestmentProfileData ParseInvestmentProfile(string data)
+		{
+			JToken json = JToken.Parse(data);
+			InvestmentProfileData investmentProfileData = new InvestmentProfileData();
+
+			investmentProfileData.interestedInOptions = (string)json["interested_in_options"];
+			investmentProfileData.annualIncome = (string)json["annual_income"];
+			investmentProfileData.investmentExperience = (string)json["investment_experience"];
+			investmentProfileData.updatedAt = (string)json["updated_at"];
+			investmentProfileData.optionTradingExperience = (string)json["option_trading_experience"];
+			investmentProfileData.understandOptionSpreads = (string)json["understand_option_spreads"];
+			investmentProfileData.riskTolerance = (string)json["risk_tolerance"];
+			investmentProfileData.totalNetWorth = (string)json["total_net_worth"];
+			investmentProfileData.liquidityNeeds = (string)json["liquidity_needs"];
+			investmentProfileData.investmentObjective = (string)json["investment_objective"];
+			investmentProfileData.sourceOfFunds = (string)json["source_of_funds"];
+			investmentProfileData.suitabilityVerified = (bool)json["suitability_verified"];
+			investmentProfileData.professionalTrader = (bool)json["professional_trader"];
+			investmentProfileData.taxBracket = (string)json["tax_bracket"];
+			investmentProfileData.timeHorizon = (string)json["time_horizon"];
+			investmentProfileData.liquidNetWorth = (string)json["liquid_net_worth"];
+			investmentProfileData.investmentExperienceCollected = (bool)json["investment_experience_collected"];
+
+			return investmentProfileData;
+		}
 	}
 }

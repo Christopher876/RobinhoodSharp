@@ -6,18 +6,17 @@ using System.Text;
 namespace Robinhood
 {
 	//TODO NEED TO IMPLEMENT INSTANT_ELIGIBILITY
+	#region Data Classes
 	class AccountData
 	{
 
 	}
-
 	class AccountID
 	{
 		public string username;
 		public string url;
 		public string id;
 	}
-
 	class AccountListKeys
 	{
 		public bool deactivated, withdrawalHalted, sweepEnabled, depositHalted, onlyPositionClosingTrades, isPinnacleAccount;
@@ -25,7 +24,6 @@ namespace Robinhood
 		public string cashBalances = null;
 		public float sma, buyingPower, maxAchEarlyAccessAmount, cashHealdForOrders, cash, smaHealdForOrders, unclearedDeposits, unsettledFunds, unsettledDebit;
 	}
-
 	class MarginBalances
 	{
 		public string updatedAt;
@@ -55,7 +53,6 @@ namespace Robinhood
 		public float unsettledFunds;
 		public float dayTradeBuyingPowerHeldForOrders;
 	}
-
 	class AccountAffiliationInfo
 	{
 		public string securityAffiliatedFirmRelationship;
@@ -72,12 +69,10 @@ namespace Robinhood
 		public string securityAffiliatedFirmName;
 		public string securityAffiliatedPersonName;
 	}
-
 	class CashBalances
 	{
 
 	}
-
 	class Employment
 	{
 		public int? employerZipCode;
@@ -90,7 +85,6 @@ namespace Robinhood
 		public string employerCity;
 		public string occupation;
 	}
-
 	class AccountBasicInfo
 	{
 		public string phoneNumber;
@@ -107,12 +101,17 @@ namespace Robinhood
 		public string address;
 		public int taxIDSSN;
 	}
-
 	class InvestmentProfileData
 	{
-		public string annualIncome, investmentExperience, investmentObjective, liquidNetWorth, liquidityNeeds, riskTolerance, sourceOfFunds, taxBracket, timeHorizon, totalNetWorth, updatedAt, user;
-		public bool suitabilityVerified;
+		public string understandOptionSpreads, optionTradingExperience, interestedInOptions, annualIncome, investmentExperience, investmentObjective, liquidNetWorth, liquidityNeeds, riskTolerance, sourceOfFunds, taxBracket, timeHorizon, totalNetWorth, updatedAt, user;
+		public bool suitabilityVerified, professionalTrader, investmentExperienceCollected;
 	}
+	class AccountPosition
+	{
+		public float sharesHeldForStockGrants, pendingAverageBuyPrice, sharesHeldForOptionsEvents, intraDayAverageBuyPrice, sharesHeldForOptionsCollateral, sharesHeldForBuys, averageBuyPrice, intradayQuantity, sharesHeldForSells, sharesPendingFromOptionsEvents, quantity;
+		public string account, url, intrument, createdAt, updatedAt;
+	}
+	#endregion
 
 	class Account
 	{
@@ -147,9 +146,14 @@ namespace Robinhood
 			return JsonParse.ParseMarginBalances(RHttpClient.RHttpClientGetWithAuthenticationHeader("/accounts/", accessToken));
 		}
 
-		public string GatherInvestmentProfile(string accessToken)
+		public InvestmentProfileData GatherInvestmentProfile(string accessToken)
 		{
-			return RHttpClient.RHttpClientGetWithAuthenticationHeader("/user/investment_profile/", accessToken);
+			return JsonParse.ParseInvestmentProfile(RHttpClient.RHttpClientGetWithAuthenticationHeader("/user/investment_profile/", accessToken));
+		}
+
+		public string GatherAccountPositions(string accessToken)
+		{
+			return RHttpClient.RHttpClientGetWithAuthenticationHeader("/positions/", accessToken); //Need to Parse this
 		}
 	}
 }
