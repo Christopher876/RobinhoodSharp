@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 
 namespace Robinhood
@@ -18,6 +19,17 @@ namespace Robinhood
 		public bool tradingHalted = false;
 		public bool hasTraded = false;
 		public string updatedAt = string.Empty;
+	}
+	class QuoteHistory
+	{
+		public string beginsAt;
+		public float openPrice;
+		public float closePrice;
+		public float highPrice;
+		public float lowPrice;
+		public int volume;
+		public string session;
+		public bool interpolated;
 	}
 
 	class Quotes
@@ -54,6 +66,11 @@ namespace Robinhood
 			}
 
 			return quoteData;
+		}
+
+		public QuoteHistory[] GatherHistoryQuotes(string symbol, Dictionary<string,string>parameters)
+		{
+			return JsonParse.ParseQuoteHistory(RHttpClient.RHttpClientGetParams("/quotes/historicals/" + symbol + "/",parameters));
 		}
 	}
 }

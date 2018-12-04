@@ -109,7 +109,7 @@ namespace Robinhood
 	class AccountPosition
 	{
 		public float sharesHeldForStockGrants, pendingAverageBuyPrice, sharesHeldForOptionsEvents, intraDayAverageBuyPrice, sharesHeldForOptionsCollateral, sharesHeldForBuys, averageBuyPrice, intradayQuantity, sharesHeldForSells, sharesPendingFromOptionsEvents, quantity;
-		public string account, url, intrument, createdAt, updatedAt;
+		public string account, url, instrument, createdAt, updatedAt;
 	}
 	#endregion
 
@@ -151,9 +151,9 @@ namespace Robinhood
 			return JsonParse.ParseInvestmentProfile(RHttpClient.RHttpClientGetWithAuthenticationHeader("/user/investment_profile/", accessToken));
 		}
 
-		public string GatherAccountPositions(string accessToken)
+		public AccountPosition[] GatherAccountPositions(string accessToken)
 		{
-			return RHttpClient.RHttpClientGetWithAuthenticationHeader("/positions/", accessToken); //Need to Parse this
+			return JsonParse.ParseAccountPosition(RHttpClient.RHttpClientGetWithAuthenticationHeader("/positions/", accessToken));
 		}
 	}
 }

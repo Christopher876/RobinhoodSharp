@@ -77,23 +77,10 @@ namespace Robinhood
 			JToken json = JToken.Parse(data);
 
 			//Get the length of the amount of data present
-			int i = 0;
-			while (true)
-			{
-				try
-				{
-					var check = json["results"][i];
-					i++;
-				}
-				catch
-				{
-					instrumentData = new InstrumentData[i];
-					break;
-				}
-			}
+			instrumentData = new InstrumentData[((JArray)json["results"]).Count];
 
 			//Iterate and get assign our values
-			i = 0;
+			int i = 0;
 			while (true)
 			{
 				try
@@ -210,23 +197,9 @@ namespace Robinhood
 
 			//Get the length of the amount of data present
 			int i = 0;
-			int length = 0;
-			while (true)
-			{
-				try
-				{
-					var check = json["results"][i];
-					i++;
-				}
-				catch
-				{
-					instrumentData = new InstrumentData[i];
-					length = i;
-					break;
-				}
-			}
+			instrumentData = new InstrumentData[((JArray)json["results"]).Count];
 
-			for(i = 0; i < length; i++)
+			for(i = 0; i < instrumentData.Length; i++)
 			{
 				instrumentData[i] = new InstrumentData();
 
@@ -274,25 +247,9 @@ namespace Robinhood
 		{
 			SplitData[] splitData;
 			JToken json = JToken.Parse(data);
+			splitData = new SplitData[((JArray)json["results"]).Count];
 
-			int i = 0;
-			int length = 0;
-			while (true)
-			{
-				try
-				{
-					var check = json["results"][i];
-					i++;
-				}
-				catch(Exception e)
-				{
-					splitData = new SplitData[i];
-					length = i;
-					break;
-				}
-			}
-
-			for(i = 0; i < length; i++)
+			for(int i = 0; i < splitData.Length; i++)
 			{
 				splitData[i] = new SplitData();
 				splitData[i].url = (string)json["results"][i]["url"];
@@ -480,7 +437,51 @@ namespace Robinhood
 			investmentProfileData.liquidNetWorth = (string)json["liquid_net_worth"];
 			investmentProfileData.investmentExperienceCollected = (bool)json["investment_experience_collected"];
 
+
 			return investmentProfileData;
+		}
+		public static AccountPosition[] ParseAccountPosition(string data)
+		{
+			JToken json = JToken.Parse(data);
+			AccountPosition[] accountPositions = new AccountPosition[((JArray)json["results"]).Count];
+			for(int i = 0; i < accountPositions.Length
+; i++)
+			{
+				accountPositions[i] = new AccountPosition();
+				accountPositions[i].sharesHeldForStockGrants = (float)json["results"][i]["shares_held_for_stock_grants"];
+				accountPositions[i].account = (string)json["results"][i]["account"];
+				accountPositions[i].pendingAverageBuyPrice = (float)json["results"][i]["pending_average_buy_price"];
+				accountPositions[i].intraDayAverageBuyPrice = (float)json["results"][i]["intraday_average_buy_price"];
+				accountPositions[i].url = (string)json["results"][i]["url"];
+				accountPositions[i].sharesHeldForOptionsCollateral = (float)json["results"][i]["shares_held_for_options_collateral"];
+				accountPositions[i].createdAt = (string)json["results"][i]["created_at"];
+				accountPositions[i].updatedAt = (string)json["results"][i]["updated_at"];
+				accountPositions[i].sharesHeldForBuys = (float)json["results"][i]["shares_held_for_buys"];
+				accountPositions[i].averageBuyPrice = (float)json["results"][i]["average_buy_price"];
+				accountPositions[i].instrument = (string)json["results"][i]["instrument"];
+				accountPositions[i].sharesHeldForSells = (float)json["results"][i]["shares_held_for_sells"];
+				accountPositions[i].sharesPendingFromOptionsEvents = (float)json["results"][i]["shares_pending_from_options_events"];
+				accountPositions[i].quantity = (float)json["results"][i]["quantity"];
+			}
+			return accountPositions;
+		}
+		public static QuoteHistory[] ParseQuoteHistory(string data)
+		{
+			JToken json = JToken.Parse(data);
+			QuoteHistory[] quoteHistories = new QuoteHistory[((JArray)json["historicals"]).Count];
+			for(int i =0; i < quoteHistories.Length; i++)
+			{
+				quoteHistories[i] = new QuoteHistory();
+				quoteHistories[i].beginsAt = (string)json["historicals"][i]["begins_at"];
+				quoteHistories[i].openPrice = (float)json["historicals"][i]["open_price"];
+				quoteHistories[i].closePrice = (float)json["historicals"][i]["close_price"];
+				quoteHistories[i].highPrice = (float)json["historicals"][i]["high_price"];
+				quoteHistories[i].lowPrice = (float)json["historicals"][i]["low_price"];
+				quoteHistories[i].volume = (int)json["historicals"][i]["volume"];
+				quoteHistories[i].session = (string)json["historicals"][i]["session"];
+				quoteHistories[i].interpolated = (bool)json["historicals"][i]["interpolated"];
+			}
+			return quoteHistories;
 		}
 	}
 }

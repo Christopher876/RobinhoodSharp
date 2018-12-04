@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -13,6 +14,12 @@ namespace Robinhood
 			return JToken.Parse(RHttpClient.RHttpClientGetWithAuthenticationHeader(testPoint, accessToken));
 		}
 
+		public static string Input(string prompt)
+		{
+			Console.WriteLine(prompt);
+			return Console.ReadLine();
+		}
+
 		static void Main(string[] args)
 		{
 			Login login = new Login();
@@ -22,6 +29,7 @@ namespace Robinhood
 			Fundamentals fundamentals = new Fundamentals();
 			Instruments instruments = new Instruments();
 			Account account = new Account();
+			Market market = new Market();
 			
 			var testDic = new Dictionary<string, string>
 			{
@@ -66,7 +74,7 @@ namespace Robinhood
 				Console.WriteLine(content[i].low52Weeks);
 				Console.WriteLine(content[i].marketCap + Environment.NewLine);
 			}
-
+			
 			InstrumentData[] instrumentData = instruments.InstrumentsByKeyWord("oil"); //Returns an array of "InstrumentData" after querying the Robinhood server
 			Console.WriteLine("-----------------------------------Instruments--------------------------");
 
@@ -80,7 +88,7 @@ namespace Robinhood
 				Console.WriteLine(item.country);
 				Console.WriteLine("------------------------------------------------------------------------------");
 			}
-
+			/*
 			Console.WriteLine("----------------------------------Instrument by Symbol------------------------------");
 			InstrumentData instrument = instruments.InstrumentsBySymbol("MSFT");
 			Console.WriteLine(instrument.simpleName);
@@ -91,7 +99,7 @@ namespace Robinhood
 			Console.WriteLine(allInstruments[18].name);
 			Console.WriteLine(allInstruments[18].simpleName);
 			Console.WriteLine(allInstruments[0].next);
-
+			/*
 			allInstruments = instruments.AllInstruments("https://api.robinhood.com/instruments/?cursor=cD0xMjk4NQ%3D%3D");
 			Console.WriteLine("----------------------------------------------Next Page---------------------------------------");
 			Console.WriteLine(allInstruments[0].name);
@@ -104,7 +112,6 @@ namespace Robinhood
 			Console.WriteLine(splitData[0].executionDate);
 			Console.WriteLine(splitData[0].instrument);
 			Console.WriteLine(splitData[0].multiplier);
-
 			Console.WriteLine("----------------------------------------------Single Splits Thing---------------------------------------");
 			SplitData splitDataSingle = instruments.GatherSplitHistoryForInstrumentSpecified(splitData[0].url);				//Single stocks get
 																															//Get one of the splits information
@@ -123,7 +130,7 @@ namespace Robinhood
 			Console.WriteLine(basicInfo.phoneNumber);
 			Console.WriteLine(basicInfo.state);
 			*/
-
+			/*
 			Console.WriteLine("Account Number: " + account.GatherListofAccounts(login.AccessToken).accountNumber);
 			Console.WriteLine(account.GatherMarginBalances(login.AccessToken).updatedAt);
 			Console.WriteLine("Start of day overnight buying power = " + account.GatherMarginBalances(login.AccessToken).startOfDayOvernightBuyingPower);
@@ -133,7 +140,10 @@ namespace Robinhood
 			Console.WriteLine("Liquid net Worth: " + investmentProfileData.liquidNetWorth);
 			Console.WriteLine("Risk Tolerance: " + investmentProfileData.riskTolerance);
 			Console.WriteLine("Investment Objective" + investmentProfileData.investmentObjective);
-			Console.WriteLine("\n\n" + account.GatherAccountPositions(login.AccessToken));
+			Console.WriteLine("\n\nAccount Average Buy Price for " + instruments.InstrumentsByID(account.GatherAccountPositions(login.AccessToken)[0].instrument.Replace("https://api.robinhood.com/instruments/","").TrimEnd('/')).simpleName + ": " + account.GatherAccountPositions(login.AccessToken)[0].averageBuyPrice);
+			Console.WriteLine("\n\nAccount Average Buy Price for " + instruments.InstrumentsByID(account.GatherAccountPositions(login.AccessToken)[1].instrument.Replace("https://api.robinhood.com/instruments/", "").TrimEnd('/')).simpleName + ": " + account.GatherAccountPositions(login.AccessToken)[1].averageBuyPrice);
+			Console.WriteLine("\n\nAccount Average Buy Price for " + instruments.InstrumentsByID(account.GatherAccountPositions(login.AccessToken)[2].instrument.Replace("https://api.robinhood.com/instruments/", "").TrimEnd('/')).simpleName + ": " + account.GatherAccountPositions(login.AccessToken)[2].averageBuyPrice);
+			Console.ReadLine();
 
 			Console.WriteLine("------------------------------------------------------------------------------Test----------------------------------------------");
 			Program program = new Program();
@@ -144,7 +154,31 @@ namespace Robinhood
 																					  //Get specific market info: /markets/{mic}/
 																					  //Get Market hours /markets/{mic}/hours/{date} WILL RETURN NULL FOR ALL VALUES IF NOT OPEN THAT DAY
 			Console.WriteLine(JToken.Parse(RHttpClient.RHttpClientGet("/markets/BATS/hours/2018-12-12")));
-			Console.WriteLine(JToken.Parse(RHttpClient.RHttpClientGet("/markets/BATS/hours/2018-12-25")));
+			Console.WriteLine(JToken.Parse(RHttpClient.RHttpClientGet("/markets/BATS/hours/2018-12-25")));*/
+
+			//interval=year|month|week|day|10minute|5minute|null(all) span=day|week|month|year|5year|all bounds=extended|regular|trading
+			//Only day can use the minute intervals
+			DateTime time = new DateTime(2018, 12, 12);
+			Console.WriteLine(time);
+			Console.WriteLine(market.GatherMarketHours("BATS", time));
+			var symbol = Input("Symbol:");
+			var interval = Input("Interval:");
+			var span = Input("Span:");
+			var bounds = Input("Bounds:");
+
+			Dictionary<string, string> param = new Dictionary<string, string>
+			{
+				{ "interval", interval},
+				{"span",span },
+				{"all bounds",bounds }
+			};
+			QuoteHistory[] quoteHistory = quotes.GatherHistoryQuotes(symbol, param);
+			for(int i = 0; i < quoteHistory.Length; i++)
+			{
+				Console.WriteLine("Open Price:" + quoteHistory[i].openPrice);
+				Console.WriteLine("Close Price: " + quoteHistory[i].closePrice);
+				Console.WriteLine("Volume: " + quoteHistory[i].volume);
+			}
 			Console.ReadLine();
 		}
 	}
