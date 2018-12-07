@@ -1,5 +1,3 @@
-# **NOTICE: I do not need pull requests or other contributions of end~o~points!
-
 # Unofficial Documentation of Robinhood Trade's Private API
 
 Table of Contents:
@@ -35,65 +33,10 @@ Things I have yet to organize are in [Unsorted.md](Unsorted.md)
 
 [Robinhood](http://robinhood.com/) is a commission-free, online securities brokerage. As you would expect, being an online service means everything is handled through a request that is made to a specific URL.
 
-# API Security
-
-The HTTPS protocol is used to access the Robinhood API. Transactions require security because most calls transmit actual account informaion. SSL Pinning is used in the official Android and iOS apps to prevent MITM attacks; you would be wise to do the same at the very least.
-
-Calls to API endpoints make use of two different levels of authentication:
-
-1. **None**: No authentication. Anyone can query the method.
-2. **Token**: Requires an authorization token generated with a call to [log in](Authentication.md#logging-in).
-
-Calls which require no authentication are generally informational ([quote gathering](Quote.md#quote-methods), [securities lookup](#instrument-methods), etc.).
-
-Authorized calls require an `Authorization` HTTP Header with the authentication type set as `Token` (Example: `Authorization: Token 40charauthozationtokenherexxxxxxxxxxxxxx`).
-
-# API Error Reporting
-
-The API reports incorrect data or improper use with HTTP status codes and JSON objects returned as body content. Some that I've run into include:
-
-| HTTP Status | Key                | Value | What I Did Wrong |
-|-------------|--------------------|-------|------------------|
-| 400         | `non_field_errors` | `["Unable to log in with provided credentials."]` | Attempted to [log in](#logging-in) with incorrect username/password |
-| 400         | `password`         | `["This field may not be blank."]`                | Attempted to [log in](#logging-in) without a password |
-| 401         | `detail`           | `["Invalid token."]`                              | Attempted to use cached token after [logging out](#logging-out) |
-| 400         | `password`           | `["This password is too short. It must contain at least 10 characters.", "This password is too common."]`                                                       | Attempted to [change my password](#password-reset) to `password` |
-
-...you get the idea. Letting you know exactly what went wrong makes the API almost self-documenting so thanks Robinhood.
-
 # Pagination
 
-Some data is returned from the Robinhood API as paginated data with `next` and `previous` cursors already in URL form.
-
-If your call returns paginated data, it will look like this call to `https://api.robinhood.com/instruments/`:
-
-```
-{
-    "previous": null,
-    "results": [{
-        "splits" : "https://api.robinhood.com/instruments/42e07e3a-ca7a-4abc-8c23-de49cb657c62/splits/",
-        "margin_initial_ratio" : "1.0000",
-        "url" : "https://api.robinhood.com/instruments/42e07e3a-ca7a-4abc-8c23-de49cb657c62/",
-        "quote" : "https://api.robinhood.com/quotes/SBPH/",
-        "symbol" : "SBPH",
-        "bloomberg_unique" : "EQ0000000028928752",
-        "list_date" : null,
-        "fundamentals" : "https://api.robinhood.com/fundamentals/SBPH/",
-        "state" : "active",
-        "tradeable" : true,
-        "maintenance_ratio" : "1.0000",
-        "id" : "42e07e3a-ca7a-4abc-8c23-de49cb657c62",
-        "market" : "https://api.robinhood.com/markets/XNAS/",
-        "name" : "Spring Bank Pharmaceuticals, Inc. Common Stock"
-    },
-        ...
-    ],
-    "next": "https://api.robinhood.com/instruments/?cursor=cD04NjUz"
-}
-```
-
-To get the next page of results, just use the `next` URL.
+Not many pieces of data return a next area in my experience while wrapping the API in C# so the occurences where pagination is necessary is slim. Areas where there is a next or previous pagination return will be documented. To call the next pagination, call the same method and instead of an empty parameter, use the next string.
 
 ## Semi-Pagination
 
-Some data is returned as a list of `results` as if they were paginate but the API doesn't supply us with `previous` or `next` keys.
+I have already handled this and organized the data.
