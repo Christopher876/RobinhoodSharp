@@ -483,5 +483,17 @@ namespace Robinhood
 			}
 			return quoteHistories;
 		}
+		public static string[] ParsePopular(string data, int size)
+		{
+			JToken json = JToken.Parse(data);
+			string[] popular = new string[size];
+
+			for(int i = 0; i< ((JArray)json["instruments"]).Count;i++)
+			{
+				popular[i] = json["instruments"][i].ToString();
+			}
+
+			return popular;
+		}
 	}
 }

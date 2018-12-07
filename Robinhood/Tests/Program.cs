@@ -9,7 +9,7 @@ namespace Robinhood
 {
 	class Program
 	{
-		public JToken TesterAuthenication(string accessToken,string testPoint)
+		public static JToken TesterAuthenication(string accessToken,string testPoint)
 		{
 			return JToken.Parse(RHttpClient.RHttpClientGetWithAuthenticationHeader(testPoint, accessToken));
 		}
@@ -30,6 +30,7 @@ namespace Robinhood
 			Instruments instruments = new Instruments();
 			Account account = new Account();
 			Market market = new Market();
+			Statistics statistics = new Statistics();
 			
 			var testDic = new Dictionary<string, string>
 			{
@@ -161,7 +162,7 @@ namespace Robinhood
 			DateTime time = new DateTime(2018, 12, 12);
 			Console.WriteLine(time);
 			Console.WriteLine(market.GatherMarketHours("BATS", time));
-			var symbol = Input("Symbol:");
+			/*var symbol = Input("Symbol:");
 			var interval = Input("Interval:");
 			var span = Input("Span:");
 			var bounds = Input("Bounds:");
@@ -178,7 +179,32 @@ namespace Robinhood
 				Console.WriteLine("Open Price:" + quoteHistory[i].openPrice);
 				Console.WriteLine("Close Price: " + quoteHistory[i].closePrice);
 				Console.WriteLine("Volume: " + quoteHistory[i].volume);
-			}
+			}*/
+			//Console.WriteLine(TesterAuthenication(login.AccessToken, "/orders/"));
+			string[] pop = statistics.Get100MostPopular();
+			/*foreach(var item in pop)
+			{
+				var thing = instruments.InstrumentsByIDTrim(item);
+				Console.WriteLine(thing.name+":"+thing.symbol);
+			}*/
+			Console.WriteLine(TesterAuthenication(login.AccessToken, "/settings/notifications/"));
+			Console.WriteLine(TesterAuthenication(login.AccessToken, "/notifications/devices/"));
+			Console.WriteLine(Environment.NewLine);
+			Console.WriteLine(Environment.NewLine);
+			//News & Info
+			Console.WriteLine(JToken.Parse(RHttpClient.RHttpClientGet("/midlands/news/MSFT/")));
+
+			Dictionary<string, string>movers = new Dictionary<string, string>
+			{
+				{"direction","up" }
+			};
+			Console.WriteLine(Environment.NewLine);
+			Console.WriteLine(Environment.NewLine);
+			Console.WriteLine(JToken.Parse(RHttpClient.RHttpClientGetParams("/midlands/movers/sp500/",movers)));
+			movers["direction"] = "down";
+			Console.WriteLine(Environment.NewLine);
+			Console.WriteLine(Environment.NewLine);
+			Console.WriteLine(JToken.Parse(RHttpClient.RHttpClientGetParams("/midlands/movers/sp500/",movers)));
 			Console.ReadLine();
 		}
 	}

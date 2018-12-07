@@ -14,9 +14,9 @@ namespace Robinhood
 		{
 			return RHttpClient.RHttpClientGet("/markets/" + market + "/");
 		}
-		public string GatherMarketHours(string market,DateTime date)
+		public string GatherMarketHours(string market, DateTime date)
 		{
-			return RHttpClient.RHttpClientGet("/markets/" + market + "/hours/" + date.ToString(@"yyyy-MM-dd") + "/"); 
+			return RHttpClient.RHttpClientGet("/markets/" + market + "/hours/" + date.ToString(@"yyyy-MM-dd") + "/");
 		}
 	}
 }

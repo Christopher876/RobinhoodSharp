@@ -63,6 +63,11 @@ namespace Robinhood
 			return JsonParse.ParseInstrumentByID(RHttpClient.RHttpClientGet("/instruments/"+id+"/"));
 		}
 
+		public InstrumentData InstrumentsByIDTrim(string id)
+		{
+			return JsonParse.ParseInstrumentByID(RHttpClient.RHttpClientGet("/instruments/" + id.Replace("https://api.robinhood.com/instruments/","")));
+		}
+
 		public InstrumentData[] AllInstruments()
 		{
 			return (JsonParse.ParseAllInstruments(RHttpClient.RHttpClientGet("/instruments/")));
