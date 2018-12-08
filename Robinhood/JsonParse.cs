@@ -465,6 +465,54 @@ namespace Robinhood
 			}
 			return accountPositions;
 		}
+		public static Dividends[] ParseAccountDividends(string data)
+		{
+			JToken json = JToken.Parse(data);
+			Dividends[] dividends = new Dividends[((JArray)json["results"]).Count];
+			
+			for(int i = 0; i < dividends.Length; i++)
+			{
+				dividends[i] = new Dividends();
+				dividends[i].account = (string)json["results"][i]["account"];
+				dividends[i].url = (string)json["results"][i]["url"];
+				dividends[i].amount = (float)json["results"][i]["amount"];
+				dividends[i].payableDate = (string)json["results"][i]["payable_date"];
+				dividends[i].instrument = (string)json["results"][i]["instrument"];
+				dividends[i].rate = (float)json["results"][i]["rate"];
+				dividends[i].recordDate = (string)json["results"][i]["record_date"];
+				dividends[i].position = (float)json["results"][i]["position"];
+				dividends[i].withHolding = (float)json["results"][i]["with_holding"];
+				dividends[i].id = (string)json["results"][i]["id"];
+				dividends[i].paidAt = (string)json["results"][i]["paid_at"];
+				dividends[i].next = (string)json["next"];
+			}
+			return dividends;
+		}
+		public static Portfolio ParseAccountPortfolio(string data)
+		{
+			JToken json = JToken.Parse(data);
+			Portfolio portfolio = new Portfolio();
+
+			portfolio.unwithdrawableGrants = (float)json["results"][0]["unwithdrawable_grants"];
+			portfolio.account = (string)json["results"][0]["account"];
+			portfolio.excessMaintenanceWithUnclearedDeposits = (float)json["results"][0]["excess_maintenance_with_uncleared_deposits"];
+			portfolio.url = (string)json["results"][0]["url"];
+			portfolio.excessMaintenance = (float)json["results"][0]["excess_maintenance"];
+			portfolio.marketValue = (float)json["results"][0]["market_value"];
+			portfolio.withdrawableAmount = (float)json["results"][0]["withdrawable_amount"];
+			portfolio.lastCoreMarketValue = (float)json["results"][0]["last_core_market_value"];
+			portfolio.unwithdrawableDeposits = (float)json["results"][0]["unwithdrawable_deposits"];
+			portfolio.extendedHoursEquity = (float)json["results"][0]["extended_hours_equity"];
+			portfolio.excessMargin = (float)json["results"][0]["excess_margin"];
+			portfolio.excessMaintenanceWithUnclearedDeposits = (float)json["results"][0]["excess_maintenance_with_uncleared_deposits"];
+			portfolio.equity = (float)json["results"][0]["equity"];
+			portfolio.lastCoreEquity = (float)json["results"][0]["last_core_equity"];
+			portfolio.adjustedEquityPreviousClose = (float)json["results"][0]["adjusted_equity_previous_close"];
+			portfolio.equityPreviousClose = (float)json["results"][0]["equity_previous_close"];
+			portfolio.startDate = (string)json["results"][0]["start_date"];
+			portfolio.extendedHoursMarketValue = (float)json["results"][0]["extended_hours_market_value"];
+			return portfolio;
+		}
 		public static QuoteHistory[] ParseQuoteHistory(string data)
 		{
 			JToken json = JToken.Parse(data);
@@ -494,6 +542,22 @@ namespace Robinhood
 			}
 
 			return popular;
+		}
+		public static Movers[] ParseMovers(string data)
+		{
+			JToken json = JToken.Parse(data);
+			Movers[] movers = new Movers[(int)json["count"]];
+
+			for(int i = 0; i < movers.Length; i++)
+			{
+				movers[i] = new Movers();
+				movers[i].instrumentUrl = (string)json["results"][i]["instrument_url"];
+				movers[i].symbol = (string)json["results"][i]["symbol"];
+				movers[i].updatedAt = (string)json["results"][i]["updated_at"];
+				movers[i].marketHoursLastMovementPct = (float)json["results"][i]["market_hours_last_movement_pct"];
+				movers[i].marketHoursLastPrice = (float)json["results"][i]["market_hours_last_price"];
+			}
+			return movers;
 		}
 	}
 }

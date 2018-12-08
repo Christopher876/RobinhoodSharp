@@ -4,7 +4,7 @@ using System.Net.Http;
 
 namespace Robinhood
 {
-	class QuoteData
+	public class QuoteData
 	{
 		public float askPrice = 0;
 		public int askSize = 0;
@@ -20,7 +20,7 @@ namespace Robinhood
 		public bool hasTraded = false;
 		public string updatedAt = string.Empty;
 	}
-	class QuoteHistory
+	public class QuoteHistory
 	{
 		public string beginsAt;
 		public float openPrice;
@@ -32,7 +32,7 @@ namespace Robinhood
 		public bool interpolated;
 	}
 
-	class Quotes
+	public class Quotes
 	{ 
 		public QuoteData GatherData(string symbol)
 		{

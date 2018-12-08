@@ -5,7 +5,7 @@ using System.Text;
 namespace Robinhood
 {
 
-	class FundamentalData
+	public class FundamentalData
 	{
 		public float open;
 		public float high;
@@ -21,7 +21,7 @@ namespace Robinhood
 		public string instrument;
 	}
 
-	class Fundamentals
+	public class Fundamentals
 	{
 		public string GatherFundamentalBySymbol(string symbol)
 		{

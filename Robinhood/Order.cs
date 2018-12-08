@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Robinhood
 {
-	class Order
+	public class Order
 	{
 
 	}

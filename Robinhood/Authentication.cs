@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Robinhood
 {
-	class Authentication
+	public class Authentication
 	{
 		public string CheckRefreshToken(Login login)
 		{

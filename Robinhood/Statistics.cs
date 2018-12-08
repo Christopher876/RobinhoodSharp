@@ -5,12 +5,12 @@ using System.Text;
 namespace Robinhood
 {
 
-	class PopularStats
+	public class PopularStats
 	{
 
 	}
 
-	class Statistics
+	public class Statistics
 	{
 		public string[] Get100MostPopular()
 		{

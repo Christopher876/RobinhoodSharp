@@ -48,7 +48,6 @@ namespace Robinhood
 			//login.AccessToken = authentication.AuthenticateUser(login,true);
 			authentication.ReadAccessToken(login);
 			authentication.CheckRefreshToken(login);
-			/*
 			//account.GatherBasicInfo(login.AccessToken);
 			//account.GatherAccountID(login.AccessToken);
 			//Console.ReadLine();
@@ -89,7 +88,6 @@ namespace Robinhood
 				Console.WriteLine(item.country);
 				Console.WriteLine("------------------------------------------------------------------------------");
 			}
-			/*
 			Console.WriteLine("----------------------------------Instrument by Symbol------------------------------");
 			InstrumentData instrument = instruments.InstrumentsBySymbol("MSFT");
 			Console.WriteLine(instrument.simpleName);
@@ -100,7 +98,7 @@ namespace Robinhood
 			Console.WriteLine(allInstruments[18].name);
 			Console.WriteLine(allInstruments[18].simpleName);
 			Console.WriteLine(allInstruments[0].next);
-			/*
+
 			allInstruments = instruments.AllInstruments("https://api.robinhood.com/instruments/?cursor=cD0xMjk4NQ%3D%3D");
 			Console.WriteLine("----------------------------------------------Next Page---------------------------------------");
 			Console.WriteLine(allInstruments[0].name);
@@ -130,8 +128,8 @@ namespace Robinhood
 			Console.WriteLine(basicInfo.countryOfResident);
 			Console.WriteLine(basicInfo.phoneNumber);
 			Console.WriteLine(basicInfo.state);
-			*/
-			/*
+			
+			
 			Console.WriteLine("Account Number: " + account.GatherListofAccounts(login.AccessToken).accountNumber);
 			Console.WriteLine(account.GatherMarginBalances(login.AccessToken).updatedAt);
 			Console.WriteLine("Start of day overnight buying power = " + account.GatherMarginBalances(login.AccessToken).startOfDayOvernightBuyingPower);
@@ -144,25 +142,13 @@ namespace Robinhood
 			Console.WriteLine("\n\nAccount Average Buy Price for " + instruments.InstrumentsByID(account.GatherAccountPositions(login.AccessToken)[0].instrument.Replace("https://api.robinhood.com/instruments/","").TrimEnd('/')).simpleName + ": " + account.GatherAccountPositions(login.AccessToken)[0].averageBuyPrice);
 			Console.WriteLine("\n\nAccount Average Buy Price for " + instruments.InstrumentsByID(account.GatherAccountPositions(login.AccessToken)[1].instrument.Replace("https://api.robinhood.com/instruments/", "").TrimEnd('/')).simpleName + ": " + account.GatherAccountPositions(login.AccessToken)[1].averageBuyPrice);
 			Console.WriteLine("\n\nAccount Average Buy Price for " + instruments.InstrumentsByID(account.GatherAccountPositions(login.AccessToken)[2].instrument.Replace("https://api.robinhood.com/instruments/", "").TrimEnd('/')).simpleName + ": " + account.GatherAccountPositions(login.AccessToken)[2].averageBuyPrice);
-			Console.ReadLine();
-
-			Console.WriteLine("------------------------------------------------------------------------------Test----------------------------------------------");
-			Program program = new Program();
-			Console.WriteLine(program.TesterAuthenication(login.AccessToken, "/applications/") + Environment.NewLine); //Applications
-			Console.WriteLine(program.TesterAuthenication(login.AccessToken, ("/accounts/" + account.GatherListofAccounts(login.AccessToken).accountNumber) + "/recent_day_trades/")); //Recent Day Trades
-			Console.WriteLine(program.TesterAuthenication(login.AccessToken, "/settings/margin/" + account.GatherListofAccounts(login.AccessToken).accountNumber + "/")); //Margin Settings
-			Console.WriteLine(JToken.Parse(RHttpClient.RHttpClientGet("/markets/"))); //market Info
-																					  //Get specific market info: /markets/{mic}/
-																					  //Get Market hours /markets/{mic}/hours/{date} WILL RETURN NULL FOR ALL VALUES IF NOT OPEN THAT DAY
-			Console.WriteLine(JToken.Parse(RHttpClient.RHttpClientGet("/markets/BATS/hours/2018-12-12")));
-			Console.WriteLine(JToken.Parse(RHttpClient.RHttpClientGet("/markets/BATS/hours/2018-12-25")));*/
 
 			//interval=year|month|week|day|10minute|5minute|null(all) span=day|week|month|year|5year|all bounds=extended|regular|trading
 			//Only day can use the minute intervals
 			DateTime time = new DateTime(2018, 12, 12);
 			Console.WriteLine(time);
 			Console.WriteLine(market.GatherMarketHours("BATS", time));
-			/*var symbol = Input("Symbol:");
+			var symbol = Input("Symbol:");
 			var interval = Input("Interval:");
 			var span = Input("Span:");
 			var bounds = Input("Bounds:");
@@ -179,32 +165,25 @@ namespace Robinhood
 				Console.WriteLine("Open Price:" + quoteHistory[i].openPrice);
 				Console.WriteLine("Close Price: " + quoteHistory[i].closePrice);
 				Console.WriteLine("Volume: " + quoteHistory[i].volume);
-			}*/
-			//Console.WriteLine(TesterAuthenication(login.AccessToken, "/orders/"));
+			}
+			Console.WriteLine(Environment.NewLine);
 			string[] pop = statistics.Get100MostPopular();
-			/*foreach(var item in pop)
+			foreach(var item in pop)
 			{
 				var thing = instruments.InstrumentsByIDTrim(item);
 				Console.WriteLine(thing.name+":"+thing.symbol);
-			}*/
+			}
+
+			//Did not implement these
 			Console.WriteLine(TesterAuthenication(login.AccessToken, "/settings/notifications/"));
 			Console.WriteLine(TesterAuthenication(login.AccessToken, "/notifications/devices/"));
 			Console.WriteLine(Environment.NewLine);
 			Console.WriteLine(Environment.NewLine);
-			//News & Info
-			Console.WriteLine(JToken.Parse(RHttpClient.RHttpClientGet("/midlands/news/MSFT/")));
 
-			Dictionary<string, string>movers = new Dictionary<string, string>
-			{
-				{"direction","up" }
-			};
-			Console.WriteLine(Environment.NewLine);
-			Console.WriteLine(Environment.NewLine);
-			Console.WriteLine(JToken.Parse(RHttpClient.RHttpClientGetParams("/midlands/movers/sp500/",movers)));
-			movers["direction"] = "down";
-			Console.WriteLine(Environment.NewLine);
-			Console.WriteLine(Environment.NewLine);
-			Console.WriteLine(JToken.Parse(RHttpClient.RHttpClientGetParams("/midlands/movers/sp500/",movers)));
+			//News & Info
+			Console.WriteLine(JToken.Parse(RHttpClient.RHttpClientGet("/midlands/news/MSFT/"))); //Need to be implemented
+			Console.WriteLine(account.GatherAccountPortfolio(login.AccessToken).extendedHoursMarketValue);
+
 			Console.ReadLine();
 		}
 	}

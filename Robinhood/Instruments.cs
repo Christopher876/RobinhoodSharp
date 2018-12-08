@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Robinhood
 {
-	class InstrumentData
+	public class InstrumentData
 	{
 		public float? minTickSize;
 		public string splits;
@@ -27,7 +27,7 @@ namespace Robinhood
 		public string next;
 	}
 
-	class SplitData
+	public class SplitData
 	{
 		public string url;
 		public string instrument;
@@ -36,7 +36,7 @@ namespace Robinhood
 		public float multiplier;
 	}
 
-	class Instruments
+	public class Instruments
 	{
 		public InstrumentData[] InstrumentsByKeyWord(string keyword)
 		{

@@ -1,8 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <Authors>Christopher Williams</Authors>
+    <Product>RobinhoodSharp</Product>
+    <Description>A simple wrapper for many of Robinhood features.</Description>
+    <ApplicationIcon />
+    <StartupObject />
   </PropertyGroup>
 
   <ItemGroup>

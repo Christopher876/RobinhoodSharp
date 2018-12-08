@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Robinhood
 {
-	class Login
+	public class Login
 	{
 		private string _username = "default";
 		private string _password = "default";

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Robinhood
 {
-	class Market
+	public class Market
 	{
 		public string GatherListofMarkets()
 		{

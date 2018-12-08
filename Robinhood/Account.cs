@@ -7,24 +7,24 @@ namespace Robinhood
 {
 	//TODO NEED TO IMPLEMENT INSTANT_ELIGIBILITY
 	#region Data Classes
-	class AccountData
+	public class AccountData
 	{
 
 	}
-	class AccountID
+	public class AccountID
 	{
 		public string username;
 		public string url;
 		public string id;
 	}
-	class AccountListKeys
+	public class AccountListKeys
 	{
 		public bool deactivated, withdrawalHalted, sweepEnabled, depositHalted, onlyPositionClosingTrades, isPinnacleAccount;
 		public string updatedAt, portfolio, type, user, url, positions, createdAt, accountNumber, canDowngradeToCash, optionLevel;
 		public string cashBalances = null;
 		public float sma, buyingPower, maxAchEarlyAccessAmount, cashHealdForOrders, cash, smaHealdForOrders, unclearedDeposits, unsettledFunds, unsettledDebit;
 	}
-	class MarginBalances
+	public class MarginBalances
 	{
 		public string updatedAt;
 		public float goldEquityRequirement;
@@ -53,7 +53,7 @@ namespace Robinhood
 		public float unsettledFunds;
 		public float dayTradeBuyingPowerHeldForOrders;
 	}
-	class AccountAffiliationInfo
+	public class AccountAffiliationInfo
 	{
 		public string securityAffiliatedFirmRelationship;
 		public bool securityAffiliatedEmployee;
@@ -69,11 +69,11 @@ namespace Robinhood
 		public string securityAffiliatedFirmName;
 		public string securityAffiliatedPersonName;
 	}
-	class CashBalances
+	public class CashBalances
 	{
 
 	}
-	class Employment
+	public class Employment
 	{
 		public int? employerZipCode;
 		public string employmentStatus;
@@ -85,7 +85,7 @@ namespace Robinhood
 		public string employerCity;
 		public string occupation;
 	}
-	class AccountBasicInfo
+	public class AccountBasicInfo
 	{
 		public string phoneNumber;
 		public string city;
@@ -101,19 +101,55 @@ namespace Robinhood
 		public string address;
 		public int taxIDSSN;
 	}
-	class InvestmentProfileData
+	public class InvestmentProfileData
 	{
 		public string understandOptionSpreads, optionTradingExperience, interestedInOptions, annualIncome, investmentExperience, investmentObjective, liquidNetWorth, liquidityNeeds, riskTolerance, sourceOfFunds, taxBracket, timeHorizon, totalNetWorth, updatedAt, user;
 		public bool suitabilityVerified, professionalTrader, investmentExperienceCollected;
 	}
-	class AccountPosition
+	public class AccountPosition
 	{
 		public float sharesHeldForStockGrants, pendingAverageBuyPrice, sharesHeldForOptionsEvents, intraDayAverageBuyPrice, sharesHeldForOptionsCollateral, sharesHeldForBuys, averageBuyPrice, intradayQuantity, sharesHeldForSells, sharesPendingFromOptionsEvents, quantity;
 		public string account, url, instrument, createdAt, updatedAt;
 	}
+	public class Dividends
+	{
+		public string account;
+		public string url;
+		public float amount;
+		public string payableDate;
+		public string instrument;
+		public float rate;
+		public string recordDate;
+		public float position;
+		public float withHolding;
+		public string id;
+		public string paidAt;
+		public string next;
+	}
+	public class Portfolio
+	{
+		public float unwithdrawableGrants;
+		public string account;
+		public float excessMaintenanceWithUnclearedDeposits;
+		public string url;
+		public float excessMaintenance;
+		public float marketValue;
+		public float withdrawableAmount;
+		public float lastCoreMarketValue;
+		public float unwithdrawableDeposits;
+		public float extendedHoursEquity;
+		public float excessMargin;
+		public float excessMarginWithUnclearedDeposits;
+		public float equity;
+		public float lastCoreEquity;
+		public float adjustedEquityPreviousClose;
+		public float equityPreviousClose;
+		public string startDate;
+		public float extendedHoursMarketValue;
+	}
 	#endregion
 
-	class Account
+	public class Account
 	{
 
 		public AccountListKeys GatherListofAccounts(string accessToken)
@@ -154,6 +190,16 @@ namespace Robinhood
 		public AccountPosition[] GatherAccountPositions(string accessToken)
 		{
 			return JsonParse.ParseAccountPosition(RHttpClient.RHttpClientGetWithAuthenticationHeader("/positions/", accessToken));
+		}
+		
+		public Dividends[] GatherAccountDividends(string accessToken)
+		{
+			return JsonParse.ParseAccountDividends(RHttpClient.RHttpClientGetWithAuthenticationHeader("/dividends/", accessToken));
+		}
+
+		public Portfolio GatherAccountPortfolio(string accessToken)
+		{
+			return JsonParse.ParseAccountPortfolio(RHttpClient.RHttpClientGetWithAuthenticationHeader("/portfolios/", accessToken));
 		}
 	}
 }

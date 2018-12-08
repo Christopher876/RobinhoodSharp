@@ -66,5 +66,27 @@ namespace Robinhood
 			client.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
 			return client.GetAsync(url).Result.Content.ReadAsStringAsync().Result;
 		}
+		
+		//Get Request with Headers for authentication
+		public static string RHttpClientGetWithAuthenticationHeaderAndParams(string url,string accessToken, Dictionary<string, string> parameters)
+		{
+			HttpClient client = new HttpClient();
+			client.BaseAddress = new Uri ("https://api.robinhood.com");
+			client.DefaultRequestHeaders.Add("Authorization", "Bearer " + accessToken);
+
+			var query = HttpUtility.ParseQueryString(string.Empty);
+			foreach (var item in parameters)
+			{
+				query[item.Key] = item.Value;
+			}
+
+			UriBuilder builder = new UriBuilder("https://api.robinhood.com" + url)
+			{
+				Port = -1,
+				Query = query.ToString()
+			};
+
+			return client.GetAsync(builder.ToString()).Result.Content.ReadAsStringAsync().Result;
+		}
 	}
 }
