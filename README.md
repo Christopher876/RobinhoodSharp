@@ -1,2 +1,5 @@
 # RobinhoodSharp
-A wrapper class around the Robinhood private api written in C#. Documentation can be found at https://github.com/sanko/Robinhood/blob/master/
+A wrapper class around the Robinhood private api written in C#. Documentation on the Robinhood private API can be found at https://github.com/sanko/Robinhood/blob/master/
+
+My Documentation can be in found here (Not completed Documentation yet):
+[RobinhoodSharp Documentation](sanko-doc-C#-Methods-Included)
