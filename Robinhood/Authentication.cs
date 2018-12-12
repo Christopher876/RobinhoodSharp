@@ -68,19 +68,20 @@ namespace Robinhood
 				{
 					accessToken = JsonParse.ParseAccessToken(content);
 					login.refreshToken = JsonParse.ParseRefreshToken(content);
+					SaveAccessTokenAndTimeStamp(accessToken, login.refreshToken);
 				}
 			}
+			return accessToken;
+		}
 
-			//MFA Authentication
-			if (mfa)
+		public string AuthenticateUserMfa(Login login, string mfaCode)
+		{
+			string accessToken = string.Empty;
+
+			using (HttpClient client = new HttpClient())
 			{
-				Console.WriteLine("Enter the Code robinhood has sent to you");
-				string mfaCode = Console.ReadLine();
-
-				using (HttpClient client = new HttpClient())
-				{
-					client.BaseAddress = new Uri("https://api.robinhood.com/");
-					var parameters = new Dictionary<string, string>
+				client.BaseAddress = new Uri("https://api.robinhood.com/");
+				var parameters = new Dictionary<string, string>
 					{
 						{"grant_type","password"},
 						{"client_id", "c82SH0WZOsabOXGP2sxqcj34FxkvfnWRZBKlBjFS"},
@@ -88,14 +89,13 @@ namespace Robinhood
 						{"password", login.password},
 						{"mfa_code",mfaCode}
 					};
-					var toPost = new FormUrlEncodedContent(parameters);
-					var response = client.PostAsync("oauth2/token/", toPost).Result;
-					var content = response.Content.ReadAsStringAsync().Result;
-					accessToken = JsonParse.ParseAccessToken(content);
-					login.refreshToken = JsonParse.ParseRefreshToken(content);
-				}
+				var toPost = new FormUrlEncodedContent(parameters);
+				var response = client.PostAsync("oauth2/token/", toPost).Result;
+				var content = response.Content.ReadAsStringAsync().Result;
+				accessToken = JsonParse.ParseAccessToken(content);
+				login.refreshToken = JsonParse.ParseRefreshToken(content);
+				SaveAccessTokenAndTimeStamp(accessToken, login.refreshToken);
 			}
-			SaveAccessTokenAndTimeStamp(accessToken,login.refreshToken);
 			return accessToken;
 		}
 
